@@ -11,6 +11,9 @@ export default function Form() {
 
     const handleChange = (e) => {
         const id = e.currentTarget.id // currentTarget return htmlElement
+
+
+        /* Replace with sugar syntaxic conditional structure*/
         let value = e.currentTarget.value
 
         if(e.currentTarget.type == 'checkbox') {
