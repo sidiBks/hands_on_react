@@ -7,7 +7,7 @@ export default function FormRef_DefaultVal() {
     const inputContryRef = useRef()
     const inputAcceptConditionsRef = useRef()
 
-    const InitialNameValue = 'Test'
+    const InitialNameValue = 'Ahmed'
     const InitialCountryValue = 'MA' 
     const InitialAgeValue = 20
     const InitialAcceptConditionsValue = true
