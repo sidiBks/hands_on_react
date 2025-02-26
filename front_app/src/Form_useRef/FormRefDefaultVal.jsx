@@ -7,6 +7,13 @@ export default function FormRef_DefaultVal() {
     const inputContryRef = useRef()
     const inputAcceptConditionsRef = useRef()
 
+    const [formValues, SetFormValues] = useState({
+        name: '',
+        country: 'MA',
+        age: null,
+        accept: false
+    })
+
     useEffect(() => {
         inputNameRef.current.value = 'Ahmed'
         inputContryRef.current.value = 'MA'
@@ -22,6 +29,10 @@ export default function FormRef_DefaultVal() {
             age: inputAgeRef.current.value,
             acceptConditoons: inputAcceptConditionsRef.current.checked
         }        
+
+        // rerender the app to update and display formValue
+        SetFormValues(values)
+
         console.log(values)
     }
 
@@ -30,6 +41,10 @@ export default function FormRef_DefaultVal() {
     return (
         <div className="container my-4">
 
+            <h2>Values</h2>
+            <hr />
+            render display : {JSON.stringify(formValues)}
+            <hr />
             <form>
                 <div className="form-group">
                     <label>Name</label>
