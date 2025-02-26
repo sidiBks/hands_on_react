@@ -51,7 +51,7 @@ export default function Form() {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="country">City</label>
+                    <label htmlFor="country">Country</label>
                     <select id="country" className="form-control" onChange={handleChange}>
                         <option value="MA">Maroc</option>
                         <option value="DZ">Algérie</option>
