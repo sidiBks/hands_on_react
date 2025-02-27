@@ -1,3 +1,3 @@
 > [!NOTE]
-> parent -> child : props
+> parent -> child : props\\
 > child -> parent : callBack
