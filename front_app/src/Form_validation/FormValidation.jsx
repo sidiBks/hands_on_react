@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 
 
 export default function FormValidation() {
@@ -50,7 +50,7 @@ export default function FormValidation() {
             })
         }
 
-        if( !acceptConditionsValue ) {
+        if (!acceptConditionsValue) {
             isFormValid = false
             setErrors(prevState => {
                 return [...prevState, { field: 'checkbox', message: ['field required'] }]
