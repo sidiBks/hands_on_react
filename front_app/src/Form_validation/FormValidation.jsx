@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 
 export default function FormValidation() {
@@ -9,7 +9,7 @@ export default function FormValidation() {
     const acceptConditions = useRef()
 
     const [isFormSent, setIsFormSent] = useState(false)
-    const [errors, setErrors] = useState([])
+    const [errors, setErrors] = useState({})
     // const [isFormValid, setIsFormValid] = useState(false)
     let isFormValid = true
 
@@ -25,7 +25,10 @@ export default function FormValidation() {
             // name.current.style.border = 'red 1px solid'
             isFormValid = false
             setErrors(prevState => {
-                return [...prevState, { field: 'name', message: ['field required'] }]
+                return {
+                    ...prevState,
+                    ...{ name: ['field required'] }
+                }
             })
         }
 
@@ -33,12 +36,18 @@ export default function FormValidation() {
             // name.current.style.border = 'red 1px solid'
             isFormValid = false
             setErrors(prevState => {
-                return [...prevState, { field: 'email', message: ['field required'] }]
+                return {
+                    ...prevState,
+                    ...{ email: ['field required'] }
+                }
             })
         } else if (!emailValue.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
             isFormValid = false
             setErrors(prevState => {
-                return [...prevState, { field: 'email', message: ['invalid email'] }]
+                return {
+                    ...prevState,
+                    ...{ email: ['invalid email'] }
+                }
             })
         }
 
@@ -46,27 +55,54 @@ export default function FormValidation() {
             // name.current.style.border = 'red 1px solid'
             isFormValid = false
             setErrors(prevState => {
-                return [...prevState, { field: 'message', message: ['field required'] }]
+                return {
+                    ...prevState,
+                    ...{ message: ['field required'] }
+                }
             })
         }
 
         if (!acceptConditionsValue) {
             isFormValid = false
             setErrors(prevState => {
-                return [...prevState, { field: 'checkbox', message: ['field required'] }]
+                return {
+                    ...prevState,
+                    ...{ accept: ['must accept conditions'] }
+                }
             })
         }
 
         return isFormValid
     }
 
+
+
     // useEffect(() => {
     //     setIsFormValid(errors.length == 0)
     // }, [errors])
 
+    const getError = fieldName => errors[fieldName]
+
+    const hasError = fieldName => getError(fieldName) != undefined
+
+    const displayError = fieldName => {
+
+        const field = document.querySelector(`#${fieldName}`)
+
+        if (hasError(fieldName)) {
+            field.style.border = '2px solid red'
+            return <div className="text-danger">{getError(fieldName)}</div>
+        }
+
+        if (field != undefined) {
+            field.removeAttribute('style')
+        }
+    }
+
     const displayErrors = () => {
-        return errors.map((error, key) => {
-            return <li key={key}> {error.field} : {error.message}</li>
+        return Object.entries(errors).map((error, key) => {
+            const [field, message] = error
+            return <li key={key}> {field} : {message}</li>
         })
     }
 
@@ -79,6 +115,7 @@ export default function FormValidation() {
 
     const submitForm = (e) => {
         e.preventDefault()
+        setIsFormSent(false)
         if (validateForm()) {
             setIsFormSent(true)
             resetForm()
@@ -91,7 +128,7 @@ export default function FormValidation() {
             {/* {isFormValid.toString()} */}
 
             {
-                errors.length > 0 ?
+                Object.keys(errors).length > 0 ?
                     <div className="alert alert-danger" role="alert">
                         <strong>ERRORS</strong>
                         {/* {JSON.stringify(errors)} */}
@@ -117,26 +154,30 @@ export default function FormValidation() {
                 <div className="form-outline mb-4">
                     <label htmlFor='name' className="form-label">Name</label>
                     <input ref={name} type="text" id="name" className="form-control" />
+                    {displayError('name')}
                 </div>
 
                 {/* Email input */}
                 <div className="form-outline mb-4">
                     <label htmlFor="email" className="form-label">Email</label>
                     <input ref={email} type="email" id="email" className="form-control" />
+                    {displayError('email')}
                 </div>
 
                 {/* Message input */}
                 <div className="form-outline mb-4">
                     <label htmlFor="message" className="form-label">Message</label>
                     <textarea ref={message} rows={4} className="form-control" id="message" ></textarea>
+                    {displayError('message')}
                 </div>
 
                 {/* Checkbox */}
                 <div className="form-outline mb-4">
-                    <input ref={acceptConditions} type="checkbox" id="acceptConditions" className="form-check-input me-2" />
-                    <label htmlFor="acceptConditions" className="form-check-label">
+                    <input ref={acceptConditions} type="checkbox" id="accept" className="form-check-input me-2" />
+                    <label htmlFor="accept" className="form-check-label">
                         Accept all conditions
                     </label>
+                    {displayError('accept')}
                 </div>
 
                 {/* Message input */}
